@@ -1,0 +1,52 @@
+apiVersion: kyverno.io/v2beta1
+kind: PolicyException
+metadata:
+  labels:
+    cleanup.kyverno.io/ttl: 2025-02-13T141457Z
+  name: policy-exc-req-r1514t2868d-0
+  namespace: kyverno
+spec:
+  exceptions:
+  - policyName: disallow-privilege-escalation
+    ruleNames:
+    - autogen-privilege-escalation
+    - privilege-escalation
+  - policyName: require-run-as-nonroot
+    ruleNames:
+    - run-as-non-root
+    - autogen-run-as-non-root
+  - policyName: restrict-automount-sa-token
+    ruleNames:
+    - autogen-validate-automountServiceAccountToken
+    - validate-automountServiceAccountToken
+  - policyName: restrict-seccomp-strict
+    ruleNames:
+    - check-seccomp-strict
+    - autogen-check-seccomp-strict
+  - policyName: disallow-capabilities-strict
+    ruleNames:
+    - autogen-require-drop-all
+    - require-drop-all
+  match:
+    any:
+    - resources:
+        kinds:
+        - Deployment
+        names:
+        - local-path-provisioner
+        namespaces:
+        - local-path-storage
+    - resources:
+        kinds:
+        - Pod
+        names:
+        - local-path-provisioner-58cc7856b6-jbhdq
+        namespaces:
+        - local-path-storage
+    - resources:
+        kinds:
+        - ReplicaSet
+        names:
+        - local-path-provisioner-58cc7856b6
+        namespaces:
+        - local-path-storage
